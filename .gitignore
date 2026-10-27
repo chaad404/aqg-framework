@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Secrets: never committed (tools/check_staged.py also blocks them)
+.env
+*.env
+.secrets/
+
+# Local data, results and course material (copyright and size)
+data/
+outputs/
+source_review/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.pdf
+*.faiss
+*.pkl
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
