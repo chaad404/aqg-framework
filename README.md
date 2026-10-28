@@ -6,6 +6,7 @@ Technical Multiple-Choice Question Generation Using Large Language Models* (Univ
 Engineering and Information Technology, 2026/27).
 
 **Status: in development.** Modules are added one at a time, each with its tests, and this README follows them.
+Done so far: secret handling with a pre-commit guard, and the endpoint registry and client (see Endpoints).
 
 ## What it does (planned)
 
@@ -22,8 +23,25 @@ Engineering and Information Technology, 2026/27).
 | Path | Purpose |
 |---|---|
 | `src/aqg/` | the package |
+| `configs/` | the pinned endpoints (`endpoints.yaml`) |
 | `tests/` | automated tests; they need no network and no API keys |
 | `tools/` | developer tools, such as the pre-commit secret guard |
+
+## Endpoints
+
+`configs/endpoints.yaml` pins each compared endpoint: the model ID, the host that serves it, the settings
+sent with every request (the same for all endpoints) and the prices used for cost estimates. An alias is
+never re-pointed; a different model or host gets a new alias.
+
+Before every run, check that all endpoints are still offered (this only lists models and costs nothing):
+
+```
+python -m aqg.endpoints.check
+```
+
+Every call through `EndpointClient` returns a `Completion` that records the request, the raw response,
+the returned model ID, the host that answered, tokens, billed and estimated cost, latency and every retry.
+Failed calls raise `EndpointError` with all their attempts, so failures can be counted rather than hidden.
 
 ## Setup
 

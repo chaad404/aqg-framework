@@ -1,0 +1,71 @@
+# Model endpoints compared in the thesis. An endpoint is a model, the host that serves it and the
+# settings sent with every request.
+#
+# Rules:
+#   * An alias is never re-pointed to another model or host. A change gets a new alias, and the old
+#     entry stays with `retired: true`, so stored runs remain interpretable.
+#   * model_id is the exact, versioned ID the host expects.
+#   * `defaults` go to every endpoint unchanged, so the comparison stays fair. They are a proposal
+#     until the pilot; freeze them with the experiment protocol.
+#   * Prices are USD per million tokens on `pricing_date`. They give an estimate only; the billed cost
+#     is stored as well whenever the provider reports it.
+
+pricing_date: "2026-10-19"   # copied from the prototype registry; re-check before the main run
+
+defaults:
+  temperature: 0.7
+  top_p: 1.0
+  max_tokens: 8192   # room for gpt-oss reasoning tokens as well as the answer
+
+endpoints:
+  gpt-oss:
+    model_id: openai/gpt-oss-120b
+    provider: openrouter          # OpenRouter is only the gateway; Groq serves the model
+    host: groq
+    api_key_env: OPENROUTER_API_KEY
+    routing: {order: [groq], allow_fallbacks: false, require_parameters: true}
+    extra: {reasoning: {effort: medium}}
+    architecture: moe
+    params_total_b: 117
+    params_active_b: 5.1
+    params_source: https://huggingface.co/openai/gpt-oss-120b
+    rpm: 30
+    price_per_m: {input: 0.15, output: 0.60}
+
+  llama33:
+    model_id: meta-llama/llama-3.3-70b-instruct
+    provider: openrouter          # pinned to one full-precision host, no fallbacks
+    host: coreweave
+    api_key_env: OPENROUTER_API_KEY
+    routing: {order: [coreweave], quantizations: [fp16], allow_fallbacks: false, require_parameters: true}
+    architecture: dense
+    params_total_b: 70
+    params_active_b: 70
+    params_source: https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct
+    rpm: 30
+    price_per_m: {input: 0.71, output: 0.71}
+
+  mistral-small:
+    model_id: mistral-small-2603  # Mistral Small 4; same host as in the prototype (Mistral), now called directly
+    provider: mistral
+    host: mistral
+    api_key_env: MISTRAL_API_KEY
+    architecture: moe
+    params_total_b: 119
+    params_active_b: 6.5
+    params_source: https://docs.mistral.ai/models/mistral-small-4-0-26-03
+    rpm: 6                        # account limits (28 Oct): 100 requests and 100k tokens a minute; a call can
+                                  # use ~15k tokens, so the token limit binds first
+    price_per_m: {input: 0.15, output: 0.60}
+
+  cohere:
+    model_id: command-a-03-2025
+    provider: cohere
+    host: cohere
+    api_key_env: COHERE_API_KEY
+    architecture: dense
+    params_total_b: 111
+    params_active_b: 111
+    params_source: https://docs.cohere.com/docs/command-a
+    rpm: 18                       # the trial key allows 20 chat calls a minute
+    price_per_m: {input: 2.50, output: 10.00}
