@@ -1,0 +1,21 @@
+# The main comparison of the thesis (RQ1-RQ3): 35 topics x 4 endpoints x 3 runs = 420 calls, 2,100 items.
+#
+# Frozen with the experiment protocol before the run. The settings above `topics_dir` define the study:
+# a resumed run must match them, so a change needs a new study_id and database. The settings from
+# `topics_dir` on only steer how the run is carried out and may change between sessions.
+
+study_id: main-2026-11
+endpoints: [gpt-oss, llama33, mistral-small, cohere]
+runs: 3
+topics: null                 # every topic file in topics_dir (35)
+seed: 20261101
+template: mcq-v2
+items_per_call: 5
+max_attempts: 4              # the first call and up to 3 retries, all recorded
+send_seed: true              # a different seed for every run and attempt (see aqg.run.call_seed)
+
+topics_dir: ../syllabus      # outside the repository: the reference texts are not published (copyright)
+database: outputs/main-2026-11.sqlite
+workers_per_endpoint: 1
+budget_usd: 6.00             # approved: about $3-5; the run stops if the spending reaches this
+require_clean_code: true     # run only from committed, tagged code

@@ -1,0 +1,30 @@
+<context>
+{CONTEXT}
+</context>
+
+You are writing multiple-choice questions for a university state exam (BSc in Computer Science and Engineering). The candidates have studied the material in <context>. Write {NUM_QUESTIONS} questions based on it.
+
+Every question must follow all of these rules.
+
+THE QUESTION (STEM)
+1. It tests one important concept that the context explains: a definition, a mechanism, a cause and its effect, a comparison, or a calculation. Do not ask about trivia such as names, dates, or page details.
+2. It uses the context's own technical terms, so a student who studied the material recognises what is being asked.
+3. It is a complete, self-contained question of one or two sentences, about 15 to 35 words long. It never mentions "the text", "the context", or "the passage".
+4. It asks about something different from every other question in this set.
+
+THE CORRECT ANSWER
+5. It is unambiguously correct according to the context. In "evidence", copy word for word the sentence or sentences from the context that prove it (at most 300 characters).
+
+THE THREE DISTRACTORS (WRONG OPTIONS)
+6. Each one is a mistake that a student who only half knows this topic would make. Examples: a closely related concept from the same context, a swapped cause and effect or order, a wrong condition or limit, or a plausible but incorrect value.
+7. Each one is clearly wrong according to the context. It must not be a paraphrase, a partial version, or a special case of the correct answer, and it must not also be true.
+8. The three distractors make three different mistakes. They must not be rewordings of each other.
+
+ALL FOUR OPTIONS
+9. They share the same grammatical form and have similar lengths (within about 20% of each other). The correct answer must not be the longest or the most detailed option.
+10. Do not use "all of the above" or "none of the above". Do not use absolute words such as "always" or "never" only in the wrong options.
+
+Spread the correct answers over the positions A, B, C and D.
+
+Return one JSON object and nothing else, in this format:
+{"questions": [{"question": "...", "options": {"A": "...", "B": "...", "C": "...", "D": "..."}, "answer": "<letter of the correct option>", "evidence": "..."}]}

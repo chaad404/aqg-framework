@@ -2,3 +2,4 @@
 # Hook scripts must keep LF endings or sh cannot run them.
 .githooks/* text eol=lf
 *.sh text eol=lf
+src/aqg/prompts/*.txt text eol=lf
