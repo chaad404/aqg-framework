@@ -375,10 +375,9 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Study {study.study_id}: {len(topics)} topics x {len(study.endpoints)} endpoints x {study.runs} runs "
           f"= {len(topics) * len(study.endpoints) * study.runs} calls of {study.items_per_call} items")
     print(f"template {template.version} ({template.sha256[:12]}), code {version or 'unknown'}, database {database}")
-    unverified = sorted(t.topic_id for t in topics
-                        if (t.meta.get("provenance") or {}).get("verification", "unverified") == "unverified")
-    if unverified:
-        print(f"NOTE: {len(unverified)} topic texts are not verified yet: {', '.join(unverified)}")
+    unreviewed = sorted(t.topic_id for t in topics if t.meta.get("reviewed") is not True)
+    if unreviewed:
+        print(f"NOTE: {len(unreviewed)} topic texts are not reviewed yet: {', '.join(unreviewed)}")
     print_table(rows)
     print(f"rough total ${sum(r['est_cost_usd'] for r in rows):.2f} (budget ${study.budget_usd:.2f}); "
           f"it assumes about {EST_OUTPUT_TOKENS} output tokens per call")

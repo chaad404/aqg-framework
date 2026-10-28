@@ -242,6 +242,8 @@ ABSOLUTES = {"always", "never", "all", "none", "only", "every", "completely", "e
 ARTICLES = {"a", "an", "the"}
 ALL_NONE = re.compile(r"\b(all|none)\s+of\s+(the\s+)?(above|these|options|answers)\b", re.I)
 NEGATIVE_STEM = re.compile(r"\b(not|except|cannot)\b|n't\b|\b(is|are)\s+(false|incorrect|untrue)\b", re.I)
+FIGURE_MENTION = re.compile(   # textbook passages cite figures and equations the question cannot show
+    r"\b(fig(?:ure)?s?\.?\s*\d|tables?\s+\d+[.\-]\d|eq(?:uation)?s?\.?\s*\(\s*\d|equation\s+\d|section\s+\d+\.\d)", re.I)
 SOURCE_MENTION = re.compile(   # "the text segment" of a process or "the text field" are content, not the source
     r"\b(the|this)\s+(given\s+|provided\s+|above\s+)?(text|passage)\b"
     r"(?!\s+(segment|section|file|editor|field|mode|area|box|message|string|data))"
@@ -274,6 +276,8 @@ def item_flags(item: dict) -> list[str]:
         flags.append("stem_length")
     if SOURCE_MENTION.search(stem):
         flags.append("mentions_source")
+    if FIGURE_MENTION.search(" ".join([stem, *options.values()])):
+        flags.append("mentions_figure")
     plain = {label: _plain(text) for label, text in options.items()}
     same = [a for a in LABELS if any(a != b and plain[a] == plain[b] for b in LABELS)]
     if same:

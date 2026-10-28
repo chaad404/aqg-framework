@@ -176,6 +176,16 @@ def test_context_switch_and_in_the_context_of_are_not_source_mentions():
     assert "mentions_source" not in item_flags(check_item(item(question=stem)).item)
 
 
+@pytest.mark.parametrize("stem,flagged", [
+    ("As shown in Fig. 5-3, which component of a closed-loop control system compares the output with the setpoint?", True),
+    ("According to eq. (3.38), how do the Fourier series coefficients of a real periodic signal x(t) relate to each other?", True),
+    ("Which statement about the routing tables in Section 5.2 of a link state router is correct for every router?", True),
+    ("Which SQL statement joins the rows of two tables that share a common key column in a relational database?", False),
+])
+def test_references_to_figures_and_equations_are_flagged(stem, flagged):
+    assert ("mentions_figure" in item_flags(check_item(item(question=stem)).item)) is flagged
+
+
 def test_cannot_makes_a_negative_stem():
     stem = "Which property of a closed-loop control system cannot be achieved by an open-loop controller alone?"
     assert "negative_stem" in item_flags(check_item(item(question=stem)).item)

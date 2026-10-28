@@ -1,10 +1,13 @@
 # The pilot: one topic per domain x 4 endpoints x 1 run = 12 calls, to find technical problems (format,
 # truncation, LaTeX, latency, cost) before the protocol is frozen. Its data is not analysed in the thesis.
+#
+# Pilot b (28 Oct) repeats it on the reference texts rebuilt from the course PDFs; the first pilot
+# (pilot-2026-10, on the prototype's drafted texts) stays in its own database.
 
-study_id: pilot-2026-10
+study_id: pilot-2026-10-b
 endpoints: [gpt-oss, llama33, mistral-small, cohere]
 runs: 1
-topics: [SYSTEM-2022-4, NETCOMP-2022-3, SPECALK-2022-2]   # formula-heavy, numbers, plain prose
+topics: [SYSTEM-2022-4, NETCOMP-2022-3, SPECALK-2022-2]   # dynamic terms, protocols, transactions
 seed: 20261030
 template: mcq-v2
 items_per_call: 5
@@ -12,7 +15,7 @@ max_attempts: 4
 send_seed: true
 
 topics_dir: ../syllabus
-database: outputs/pilot-2026-10.sqlite
+database: outputs/pilot-2026-10-b.sqlite
 workers_per_endpoint: 1
 budget_usd: 0.20
 require_clean_code: false
